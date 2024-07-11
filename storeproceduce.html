@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="productdesign.css">
+    <title>Product Service</title>
+</head>
+<body>
+    <h1>ELECTRONICS STORE MANAGEMENT</h1>
+    
+
+  
+    <br></br>
+    <div>
+        <h2>Product List</h2>
+        <table id="productList">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Service Tag</th>
+                    <th>Product Name</th>
+                    <th>Product Cost</th>
+                    <th>Available</th>
+                    <th>CGST_tax</th>
+                    <th>IGST_tax</th>
+                    <th>SGST_tax</th>
+                    <th>Select order</th>
+                   
+                </tr>
+            </thead>
+            <tbody id="productTableBody">
+                <!-- Product rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+<br></br>
+<button type="button" id="Showorder">Show Order</button>
+ <button type="button" id="userupdate">UserUpdate</button>
+<script>
+    document.getElementById("Showorder").addEventListener("click", function() {
+       // Redirect to orderbuying.html
+       window.location.href = "showdisplay.html";
+   });
+   document.getElementById("userupdate").addEventListener("click", function() {
+       // Redirect to orderbuying.html
+       window.location.href = "customercrud.html";
+    });
+    
+</script>
+
+ 
+<script>
+    // Call fetchProducts when the page loads to initially display the products
+    window.onload = fetchProducts;
+</script>
+<script>
+   
+    function selectOrder(productCost) {
+      // Navigate to orderbuying.html with product cost appended to the URL
+      window.location.href =`orderbuying.html?productCost=${productCost}`;
+    }
+
+    </script>
+     
+    <!-- Include the JavaScript file -->
+    <script src="Storeprocudure.js"></script>
+    
+</body>
+</html>
