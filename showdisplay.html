@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>Orders</h2>
+    <table id="ordersTable">
+        <thead>
+            <tr>
+                <th>OrderofProduct</th>      
+                <th>Product Quantity</th>
+                <th>Product Cost</th>
+                <th>Item Name</th>
+            </tr>
+        </thead>
+        <tbody id="ordersBody">
+            <!-- Table body will be populated dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        // Fetch data from the server
+        function fetchOrderProducts() {
+    fetch('http://localhost:8356/ElectronicsStore/orderproducts/all')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch order products. Server responded with status: ' + response.status);
+            }
+            return response.json(); // Assuming the response is JSON
+        })
+        .then(data => {
+            renderOrderProductsTable(data);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            alert('Failed to fetch order products. Please try again later.');
+        });
+}
+
+// Function to render order products data in the table
+function renderOrderProductsTable(orderProducts) {
+    const tbody = document.getElementById('ordersBody');
+    tbody.innerHTML = ''; // Clear existing rows
+    orderProducts.forEach(order => {
+        const row = `
+            <tr>
+                <td>${order.orderProductId}</td>
+                <td>${order.productQuantity}</td>
+                <td>${order.productCost}</td>
+                <td>${order.itemName}</td>
+            </tr>
+        `;
+        tbody.innerHTML += row;
+    });
+}
+window.onload = function() {
+   
+    fetchOrderProducts();
+};
+    </script>
+</body>
+</html>
