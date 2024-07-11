@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+    <style>
+        .buy-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        .my-element {
+            color: black;
+            background-color: white;
+        }
+        h3 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="customerNameHeader">Order History for: </h1>
+    <table id="historyTable">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Order Date</th>
+                <th>Order Cost</th>
+                <th>Total Quantity</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Order history will be inserted here dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to get URL parameters
+            function getUrlParameter(name) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name);
+            }
+
+            // Fetch customerName from URL
+            const customerName = getUrlParameter('customerName');
+
+            if (customerName) {
+                displayCustomerName(customerName);
+                fetchOrderHistory(customerName);
+            } else {
+                console.error('Customer Name not found in URL.');
+            }
+        });
+
+        function displayCustomerName(customerName) {
+            const header = document.getElementById('customerNameHeader');
+            header.textContent = `Order History for: ${customerName}`;
+        }
+
+        function fetchOrderHistory(customerName) {
+            const ordersHistoryUrl = `http://localhost:8356/ElectronicsStore/orders/all`;
+
+            fetch(ordersHistoryUrl)
+                .then(response => response.json())
+                .then(orders => {
+                    const filteredOrders = orders.filter(order => 
+                        order.customerName === customerName && order.status.toLowerCase() === 'completed'
+                    );
+                    displayOrderHistory(filteredOrders);
+                })
+                .catch(error => console.error('Error fetching order history:', error));
+        }
+
+        function displayOrderHistory(orders) {
+            const historyTableBody = document.querySelector('#historyTable tbody');
+            historyTableBody.innerHTML = ''; // Clear previous history
+
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.orderId}</td>
+                    <td>${new Date(order.orderDate).toLocaleDateString()}</td>
+                    <td>${order.orderCost}</td>
+                    <td>${order.totalQuantity}</td>
+                    <td>${order.status}</td>
+                `;
+                historyTableBody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
