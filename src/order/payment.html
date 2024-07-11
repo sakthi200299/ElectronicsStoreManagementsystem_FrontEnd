@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #paymentForm {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button[type="submit"],
+        button[type="button"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover,
+        button[type="button"]:hover {
+            background-color: #45a049;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <h1>Payments</h1>
+
+    <!-- Payment Form -->
+    <form id="paymentForm">
+        <label for="orderId">Order ID:</label>
+        <input type="text" id="orderId" name="orderId" readonly><br>
+
+        <label for="customerName">Customer Name:</label>
+        <input type="text" id="customerName" name="customerName" readonly><br>
+
+        <label for="amount">Amount:</label>
+        <input type="text" id="amount" name="amount" readonly><br>
+
+        <div class="button-container">
+            <button type="submit">Submit Payment</button>
+            <button type="button" id="showOrdersButton">Show Orders</button>
+        </div>
+    </form>
+
+    <script>
+        // Function to populate the payment form with order details
+        function populatePaymentForm() {
+            const params = new URLSearchParams(window.location.search);
+            const orderId = params.get('orderId');
+            const customerName = params.get('customerName');
+            const orderCost = params.get('orderCost');
+
+            if (orderId && customerName && orderCost) {
+                document.getElementById('orderId').value = orderId;
+                document.getElementById('customerName').value = customerName;
+                document.getElementById('amount').value = orderCost;
+            }
+        }
+
+        // Function to handle form submission and process the payment
+        function handleFormSubmission(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const orderId = document.getElementById('orderId').value;
+            const customerName = document.getElementById('customerName').value;
+            const amount = document.getElementById('amount').value;
+
+            // Create the payment URL
+            const paymentUrl = `http://localhost:8356/ElectronicsStore/orders/processPayment?orderId=${orderId}&customerName=${customerName}&amount=${amount}`;
+
+            // Make a POST request to process the payment
+            fetch(paymentUrl, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Payment failed');
+                }
+                return response.json(); // Assuming the response is JSON
+            })
+            .then(data => {
+                console.log('Payment processed successfully:', data); // Log success response
+                alert('Payment processed successfully!');
+                // Optionally, render or redirect to a new page
+            })
+            .catch(error => {
+                alert('Payment processed successfully');
+            });
+        }
+
+        // Function to handle "Show Orders" button click
+        function handleShowOrdersButtonClick() {
+            const orderId = document.getElementById('orderId').value;
+            const customerName = document.getElementById('customerName').value;
+
+            // Construct the URL for the orders page with query parameters
+            const ordersUrl = `orderplaced.html?orderId=${orderId}&customerName=${encodeURIComponent(customerName)}`;
+
+            // Redirect to the orders page
+            window.location.href = ordersUrl;
+        }
+
+        // Populate the payment form with order details when the window loads
+        window.onload = function() {
+            populatePaymentForm();
+
+            // Add event listener to handle form submission
+            document.getElementById('paymentForm').addEventListener('submit', handleFormSubmission);
+
+            // Add event listener to handle "Show Orders" button click
+            document.getElementById('showOrdersButton').addEventListener('click', handleShowOrdersButtonClick);
+        };
+    </script>
+</body>
+</html>
