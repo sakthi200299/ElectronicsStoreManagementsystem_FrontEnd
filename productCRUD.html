@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="productdesign.css">
+
+    <title>Product Management</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Product Management</h1>
+        
+        <!-- Add Product Form -->
+        <div>
+            <h2>Add Product</h2>
+            <form id="addProductForm" onsubmit="addProduct(event)">
+                <div class="form-group">
+                    <label for="serviceTag">Service Tag:</label>
+                    <input type="text" id="serviceTag" name="serviceTag" placeholder="Enter Service Tag">
+                </div>
+                <div class="form-group">
+                    <label for="productName">Product Name:</label>
+                    <input type="text" id="productName" name="productName" placeholder="Enter Product Name">
+                </div>
+                <div class="form-group">
+                    <label for="productCost">Product Cost:</label>
+                    <input type="number" id="productCost" name="productCost" placeholder="Enter Product Cost">
+                </div>
+                <button type="submit">Add Product</button>
+            </form>
+        </div>
+
+        <!-- Update Product Form -->
+        <div>
+            <h2>Update Product</h2>
+            <form id="updateProductForm" onsubmit="updateProduct(event)">
+                <div class="form-group">
+                    <label for="updateProductId">Product ID:</label>
+                    <input type="text" id="updateProductId" name="updateProductId" placeholder="Enter Product ID">
+                </div>
+                <div class="form-group">
+                    <label for="updateServiceTag">Service Tag:</label>
+                    <input type="text" id="updateServiceTag" name="updateServiceTag" placeholder="Enter Service Tag">
+                </div>
+                <div class="form-group">
+                    <label for="updateProductName">Product Name:</label>
+                    <input type="text" id="updateProductName" name="updateProductName" placeholder="Enter Product Name">
+                </div>
+                <div class="form-group">
+                    <label for="updateProductCost">Product Cost:</label>
+                    <input type="number" id="updateProductCost" name="updateProductCost" placeholder="Enter Product Cost">
+                </div>
+                <button type="submit">Update Product</button>
+            </form>
+        </div>
+        
+        <div>
+            <h2>Delete Product</h2>
+            <form id="deleteProductForm" onsubmit="deleteProduct(event)">
+                <div class="form-group">
+                    <label for="deleteProductId">Product ID:</label>
+                    <input type="text" id="deleteProductId" name="deleteProductId" placeholder="Enter Product ID">
+                </div>
+                <button type="submit">Delete Product</button>
+            </form>
+        </div>
+        <div>
+            <h2>Product List</h2>
+            <table id="productlist">
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Service Tag</th>
+                        <th>Product Name</th>
+                        <th>Product Cost</th>
+                        <th>Available</th>
+                        <th>CGST_tax</th>
+                        <th>IGST_tax</th>
+                        <th>SGST_tax</th>
+                    </tr>
+                </thead>
+                <tbody id="producttableBody">
+                    <!-- Product rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+        
+      
+    <!-- Include the JavaScript file -->
+    <script src="product_management.js"></script>
+    <script src="productdisplay.js"></script>
+    <script>
+        // Call fetchProducts when the page loads to initially display the products
+        window.onload =fetchAllProducts;
+    </script>
+</body>
+</html>
